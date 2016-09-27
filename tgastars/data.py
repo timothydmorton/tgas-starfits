@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 GAIADIR = os.getenv('GAIADATA', os.path.expanduser('~/.gaia'))
 DATADIR = os.getenv('TGASTARS', os.path.expanduser('~/.tgastars'))
