@@ -1,6 +1,8 @@
 
 from __future__ import print_function, division
 
+from isochrones.query import Query
+
 class TGASQuery(Query):
     """Special subclass for a query based on TGAS DR1.  
 

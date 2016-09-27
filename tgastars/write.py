@@ -5,7 +5,7 @@ import numpy as np
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 
-from isochrones.query import Query, TwoMASS, Tycho2, WISE, EmptyQueryError
+from isochrones.query import TwoMASS, Tycho2, WISE, EmptyQueryError
 from isochrones.extinction import get_AV_infinity
 import configobj
 
