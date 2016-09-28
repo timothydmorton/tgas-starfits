@@ -6,7 +6,7 @@ import pandas as pd
 from multiprocessing import Pool
 
 from isochrones import StarModel
-from .data import dirname, get_completed_ids
+from .data import dirname, get_completed_ids, DATADIR
 
 def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
                  qs=[0.05,0.16,0.5,0.84,0.95], model_name='dartmouth_starmodel_single',
@@ -54,4 +54,7 @@ def make_summary_df(processes=1, **kwargs):
     pool = Pool(processes=processes)
     dfs = pool.map(get_quantiles, get_completed_ids())
 
-    return pd.concat(dfs)
+    df = pd.concat(dfs)
+    df.to_hdf(os.path.join(DATADIR, 'completed.h5'), 'df')
+
+    return df
