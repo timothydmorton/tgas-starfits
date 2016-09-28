@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+
+from tgastars.data import update_completed
+
+update_completed()
