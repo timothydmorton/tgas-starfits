@@ -55,6 +55,8 @@ def make_summary_df(processes=1, **kwargs):
     dfs = pool.map(get_quantiles, get_completed_ids())
 
     df = pd.concat(dfs)
-    df.to_hdf(os.path.join(DATADIR, 'summary.h5'), 'df')
+    filename = os.path.join(DATADIR, 'summary.h5')
+    df.to_hdf(filename, 'df')
 
+    print('Summary dataframe written to {}'.format(filename))
     return df
