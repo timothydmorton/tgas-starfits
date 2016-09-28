@@ -9,7 +9,7 @@ from .data import dirname
 
 def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
                  qs=[0.05,0.16,0.5,0.84,0.95], model_name='dartmouth_starmodel_single',
-                 verbose=False):
+                 verbose=False, raise_exceptions=False):
     """Returns parameter quantiles for starmodel i (as indexed by TGAS table)
     """
 
@@ -22,6 +22,8 @@ def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
     except:
         if verbose:
             print('cannnot load {}'.format(modfile))
+        if raise_exceptions:
+            raise
         return pd.DataFrame()
         
     q_df = mod.samples[columns].quantile(qs)

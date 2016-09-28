@@ -11,7 +11,10 @@ except IOError:
     sys.exit()
 
 def source_id(i):
-    return TGAS.iloc[i].source_id
+    if i > len(TGAS):
+        return i
+    else:
+        return TGAS.iloc[i].source_id
 
 def dirname(i):
     """Returns directory name, given index
