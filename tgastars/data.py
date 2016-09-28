@@ -26,19 +26,20 @@ def dirname(i):
 
     return os.path.join(DATADIR, 'starmodels', str(gid)[:3], str(gid))
 
+
+def _get_ini_files(d):
+    ini_files = glob.glob('{}/*/star.ini'.format(d))
+    return [os.path.basename(os.path.dirname(f))
+                for f in ini_files]
+
 def update_completed(processes=1, test=False):
     all_stars = []
     dirs = [os.path.join(STARMODELDIR, d) for d in os.listdir(STARMODELDIR)]
     if test: 
         dirs = dirs[:20]
 
-    def get_in_dir(d):
-        ini_files = glob.glob('{}/*/star.ini'.format(d))
-        return [os.path.basename(os.path.dirname(f))
-                    for f in ini_files]
-
     pool = Pool(processes=processes)
-    all_stars = pool.map(get_in_dir, dirs)
+    all_stars = pool.map(_get_ini_files, dirs)
 
     all_stars = np.array([x for y in all_stars for y in x])
     np.random.sort(all_stars)
