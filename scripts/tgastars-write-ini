@@ -16,6 +16,7 @@ if __name__=='__main__':
     parser.add_argument('-p','--processes', type=int, default=1)
     parser.add_argument('--all', action='store_true')
     parser.add_argument('-n', type=int, default=None)
+    parser.add_argument('-e', '--exceptions', action='store_true')
 
     args = parser.parse_args()
 
@@ -29,6 +30,9 @@ if __name__=='__main__':
     else:
         inds = args.indices
 
+    def do_the_thing(i):
+        return write_ini(i, raise_exceptions=args.exceptions)
+
     pool = Pool(processes=args.processes)
-    pool.map(write_ini, inds)
+    pool.map(do_the_thing, inds)
 

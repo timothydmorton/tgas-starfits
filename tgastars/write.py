@@ -12,7 +12,8 @@ import configobj
 from .data import TGAS, dirname
 from .query import TGASQuery
 
-def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False):
+def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
+                raise_exceptions=False):
     try:
         s = TGAS.iloc[i]
         
@@ -67,3 +68,6 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False):
 
     except:
         print('unknown Error with index {}!'.format(i))
+        if raise_exceptions:
+            raise
+
