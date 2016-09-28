@@ -17,4 +17,5 @@ def dirname(i):
     """Returns directory name, given index
     """
     gid = source_id(i)
-    return os.path.join(DATADIR, 'starmodels', str(gid))
+
+    return os.path.join(DATADIR, 'starmodels', str(gid)[:3], str(gid))
