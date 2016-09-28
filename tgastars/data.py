@@ -41,7 +41,7 @@ def update_completed(processes=1, test=False):
     pool = Pool(processes=processes)
     all_stars = pool.map(_get_ini_files, dirs)
 
-    all_stars = np.array([x for y in all_stars for y in x])
+    all_stars = np.array([x for y in all_stars for x in y])
     np.random.sort(all_stars)
     if test:
         print(all_stars)
