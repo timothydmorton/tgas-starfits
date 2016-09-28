@@ -70,10 +70,10 @@ def get_completed_ids():
     """
     returns list of stellar IDs that have been fit
     """
-    return np.loadtxt(os.path.join(DATADIR, 'completed.list'))
+    return np.loadtxt(os.path.join(DATADIR, 'completed.list'), fmt='%i')
 
 def get_ready_ids():
     """
     returns list of stellar IDs that have been fit
     """
-    return np.loadtxt(os.path.join(DATADIR, 'ready.list'))
+    return np.loadtxt(os.path.join(DATADIR, 'ready.list'), fmt='%i')
