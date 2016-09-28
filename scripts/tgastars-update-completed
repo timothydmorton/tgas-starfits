@@ -9,8 +9,9 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Figure out what is ready to fit and what has been fit.')
 
     parser.add_argument('--test', action='store_true')
+    parser.add_argument('-p', '--processes', type=int, default=1)
 
     args = parser.parse_args()
 
 
-    update_completed(test=args.test)
+    update_completed(test=args.test, processes=args.processes)
