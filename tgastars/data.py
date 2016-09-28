@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 import os, sys, glob
-from multiprocessing import Pool
+#from multiprocessing import Pool
+from multithreading import Pool
 
 GAIADIR = os.getenv('GAIADATA', os.path.expanduser('~/.gaia'))
 DATADIR = os.getenv('TGASTARS', os.path.expanduser('~/.tgastars'))
@@ -62,7 +63,14 @@ def update_completed(processes=1, test=False):
         np.savetxt(os.path.join(DATADIR, 'ready.list'), all_stars, fmt='%s')
 
 
-def get_completed():
+def get_completed_ids():
     """
     returns list of stellar IDs that have been fit
     """
+    return np.loadtxt(os.path.join(DATADIR, 'completed.list'))
+
+def get_ready_ids():
+    """
+    returns list of stellar IDs that have been fit
+    """
+    return np.loadtxt(os.path.join(DATADIR, 'ready.list'))
