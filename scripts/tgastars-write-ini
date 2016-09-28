@@ -16,5 +16,7 @@ if __name__=='__main__':
 
     n = len(args.indices)
     for i in args.indices:
-        write_ini(i)
-
+        try:
+            write_ini(i)
+        except:
+            print('Error with index {}'.format(i))
