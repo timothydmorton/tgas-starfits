@@ -44,7 +44,8 @@ def update_completed(processes=1, test=False):
     all_stars = np.array([x for y in all_stars for x in y])
     all_stars.sort()
     if test:
-        [print(s) for s in all_stars]
+        for s in all_stars:
+            print(s)
     else:
         np.savetxt(os.path.join(DATADIR, 'completed.list'), all_stars, fmt='%s')
 
