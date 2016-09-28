@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os, sys, glob
+from multiprocessing import Pool
 
 GAIADIR = os.getenv('GAIADATA', os.path.expanduser('~/.gaia'))
 DATADIR = os.getenv('TGASTARS', os.path.expanduser('~/.tgastars'))
@@ -25,21 +26,27 @@ def dirname(i):
 
     return os.path.join(DATADIR, 'starmodels', str(gid)[:3], str(gid))
 
-def update_completed():
+def update_completed(processes=1, test=False):
     all_stars = []
-    dirs = os.listdir(STARMODELDIR)
+    dirs = [os.path.join(STARMODELDIR, d) for d in os.listdir(STARMODELDIR)]
+    if test: 
+        dirs = dirs[:20]
 
-    for d in dirs:
-        d = os.path.join(STARMODELDIR, d)
-        if not os.path.isdir(d):
-            continue
+    def get_in_dir(d):
         ini_files = glob.glob('{}/*/star.ini'.format(d))
-        all_stars = all_stars + [os.path.basename(os.path.dirname(f))
-                                 for f in ini_files]
+        return [os.path.basename(os.path.dirname(f))
+                    for f in ini_files]
 
-    all_stars = np.array(all_stars)
+    if np > 1:
+        pool = Pool(processes=processes)
+        all_stars = pool.map(get_in_dir, dirs)
+
+    all_stars = np.array([x for y in all_stars for y in x])
     np.random.sort(all_stars)
-    np.savetxt(os.path.join(DATADIR, 'completed.list'), all_stars, fmt='%s')
+    if test:
+        print(all_stars)
+    else:
+        np.savetxt(os.path.join(DATADIR, 'completed.list'), all_stars, fmt='%s')
 
 
 def get_completed():
