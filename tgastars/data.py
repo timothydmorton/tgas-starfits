@@ -32,22 +32,34 @@ def _get_ini_files(d):
     return [os.path.basename(os.path.dirname(f))
                 for f in ini_files]
 
+def _get_h5_files(d, modelname='dartmouth_starmodel_single'):
+    h5_files = glob.glob('{}/*/{}.h5'.format(d,modelname))
+    return [os.path.basename(os.path.dirname(f))
+                for f in h5_files]
+
 def update_completed(processes=1, test=False):
-    all_stars = []
+
+
     dirs = [os.path.join(STARMODELDIR, d) for d in os.listdir(STARMODELDIR)]
     if test: 
         dirs = dirs[:20]
 
     pool = Pool(processes=processes)
-    all_stars = pool.map(_get_ini_files, dirs)
 
-    all_stars = np.array([x for y in all_stars for x in y])
+    done_stars = np.array([x for y in pool.map(_get_h5_files, dirs) for x in y])
+    done_stars.sort()
+    if test:
+        np.savetxt(os.path.join(DATADIR, 'completed_test.list'), done_stars, fmt='%s')
+    else:
+        np.savetxt(os.path.join(DATADIR, 'completed.list'), done_stars, fmt='%s')
+
+
+    all_stars = np.array([x for y in pool.map(_get_ini_files, dirs) for x in y])
     all_stars.sort()
     if test:
-        for s in all_stars:
-            print(s)
+        np.savetxt(os.path.join(DATADIR, 'ready_test.list'), all_stars, fmt='%s')
     else:
-        np.savetxt(os.path.join(DATADIR, 'completed.list'), all_stars, fmt='%s')
+        np.savetxt(os.path.join(DATADIR, 'ready.list'), all_stars, fmt='%s')
 
 
 def get_completed():
