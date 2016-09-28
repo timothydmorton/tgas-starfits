@@ -37,9 +37,8 @@ def update_completed(processes=1, test=False):
         return [os.path.basename(os.path.dirname(f))
                     for f in ini_files]
 
-    if np > 1:
-        pool = Pool(processes=processes)
-        all_stars = pool.map(get_in_dir, dirs)
+    pool = Pool(processes=processes)
+    all_stars = pool.map(get_in_dir, dirs)
 
     all_stars = np.array([x for y in all_stars for y in x])
     np.random.sort(all_stars)
