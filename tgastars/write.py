@@ -54,6 +54,8 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False):
                 empty = False
             except EmptyQueryError:
                 pass
+            except ValueError:
+                pass
 
             if not empty:
                 n = Cat.name
@@ -62,6 +64,6 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False):
                 c[n]['resolution'] = 4.
 
         c.write()
-        
+
     except:
-        print('Error with index {}'.format(i))
+        print('unknown Error with index {}!'.format(i))
