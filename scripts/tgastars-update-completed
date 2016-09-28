@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import argparse
+
 from tgastars.data import update_completed
 
 if __name__=='__main__':
