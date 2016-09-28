@@ -22,7 +22,7 @@ if __name__=='__main__':
     if args.all:
         from tgastars.data import TGAS
         N = len(TGAS)
-        inds = np.range(N)
+        inds = np.arange(N)
         np.random.shuffle(inds)
         if args.n is not None:
             inds = inds[:args.n]
