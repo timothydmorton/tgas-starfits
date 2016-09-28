@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 import os, sys, glob
-#from multiprocessing import Pool
-from multiprocessing.pool import ThreadPool as Pool
+from multiprocessing import Pool
+#from multiprocessing.pool import ThreadPool as Pool
 
 GAIADIR = os.getenv('GAIADATA', os.path.expanduser('~/.gaia'))
 DATADIR = os.getenv('TGASTARS', os.path.expanduser('~/.tgastars'))
