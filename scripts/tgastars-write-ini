@@ -3,6 +3,7 @@ import sys, os
 import argparse
 
 from tgastars.write import write_ini
+from multiprocessing import Pool
 
 if __name__=='__main__':
 
@@ -11,12 +12,10 @@ if __name__=='__main__':
     parser.add_argument('indices', nargs='*', type=int)
     parser.add_argument('-o','--overwrite', action='store_true')
     parser.add_argument('-v','--verbose', action='store_true')
+    parser.add_argument('-p' '--processes', type=int, default=1)
 
     args = parser.parse_args()
 
-    n = len(args.indices)
-    for i in args.indices:
-        try:
-            write_ini(i)
-        except:
-            print('Error with index {}'.format(i))
+    pool = Pool(processes=args.processes)
+    pool.map(write_ini, args.indices)
+
