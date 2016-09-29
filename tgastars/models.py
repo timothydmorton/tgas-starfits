@@ -42,4 +42,4 @@ def get_starmodel(i, modelname='dartmouth_starmodel_single'):
     d = dirname(i)
 
     modfile = os.path.join(d,'{}.h5'.format(modelname))
-    return StarModel.load_hdf(modfile)
+    return GaiaDR1_StarModel.load_hdf(modfile)
