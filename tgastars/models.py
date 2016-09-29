@@ -1,5 +1,7 @@
 from __future__ import print_function, division
 
+import os
+
 from isochrones import StarModel
 
 from .data import dirname
