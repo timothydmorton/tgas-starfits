@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os, sys, glob
+import logging
 from multiprocessing import Pool
 #from multiprocessing.pool import ThreadPool as Pool
 
@@ -11,8 +12,8 @@ STARMODELDIR = os.path.join(DATADIR, 'starmodels')
 try:
     TGAS = pd.read_hdf(os.path.join(GAIADIR, 'TgasSource.h5'), 'df')
 except IOError:
-    print('Run tgastars-write-tgas-hdf first. Exiting.')
-    sys.exit()
+    logging.warning('Run tgastars-write-tgas-hdf first!')
+    TGAS = None
 
 def source_id(i):
     if i > len(TGAS):
