@@ -27,6 +27,6 @@ class TGASQuery(Query):
         if i < len(TGAS):
             ind = i
         else:            
-            ind = np.where(TGAS.source_id==i)[0][0]
+            ind = np.where(TGAS.source_id.astype(int)==i)[0][0]
         new = cls(TGAS.iloc[ind], **kwargs)
         return new
