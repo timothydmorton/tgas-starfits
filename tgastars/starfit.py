@@ -1,5 +1,7 @@
 from __future__ import print_function, division
 
+import os
+
 from isochrones.starfit import starfit
 
 from .data import dirname
