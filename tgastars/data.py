@@ -22,6 +22,15 @@ def source_id(i):
     else:
         return TGAS.iloc[i].source_id
 
+def get_row(i):
+    """Returns either row index i or by source_id
+    """
+    if i < len(TGAS):
+        ind = i
+    else:
+        ind = np.where(TGAS.source_id==i)[0][0]
+    return TGAS.iloc[ind]
+
 def dirname(i):
     """Returns directory name, given index
     """

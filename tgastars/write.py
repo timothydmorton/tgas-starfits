@@ -9,19 +9,19 @@ from isochrones.query import TwoMASS, Tycho2, WISE, EmptyQueryError
 from isochrones.extinction import get_AV_infinity
 import configobj
 
-from .data import TGAS, dirname
+from .data import TGAS, dirname, get_row
 from .query import TGASQuery
 
 def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
                 raise_exceptions=False):
     try:
-        s = TGAS.iloc[i]
-        
         # name directory by index
         directory = dirname(i)
         if not os.path.exists(directory):
             os.makedirs(directory)
         
+        s = get_row(i)
+
         ini_file = os.path.join(directory, 'star.ini')
         if os.path.exists(ini_file):
             if overwrite:
