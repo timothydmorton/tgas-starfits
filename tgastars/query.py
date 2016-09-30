@@ -3,6 +3,10 @@ from __future__ import print_function, division
 
 from isochrones.query import Query
 
+from .data import TGASPATHa
+
+TGAS = None
+
 class TGASQuery(Query):
     """Special subclass for a query based on TGAS DR1.  
 
@@ -13,3 +17,14 @@ class TGASQuery(Query):
         Query.__init__(self, row.ra, row.dec, row.pmra, row.pmdec, 
                         epoch=row.ref_epoch, radius=radius)
 
+    @classmethod
+    def from_id(cls, i, **kwargs):
+        global TGAS
+        if TGAS is None:
+            TGAS = pd.read_hdf(TGASPATH, 'df')
+        if i < len(TGAS):
+            ind = i
+        else:            
+            ind = np.where(TGAS.source_id==i)[0][0]
+        new = cls(TGAS.iloc[ind], **kwargs)
+        return new
