@@ -12,7 +12,7 @@ def tgas_starfit(i, ini_kwargs=None, **kwargs):
     d = dirname(i)
     if not os.path.exists(os.path.join(d, 'star.ini')):
         if ini_kwargs is None:
-            ini_kwargs = {}}
+            ini_kwargs = {}
             if 'raise_exceptions' not in ini_kwargs:
                 ini_kwargs['raise_exceptions'] = True
         write_ini(i, **ini_kwargs)
