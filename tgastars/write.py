@@ -63,6 +63,7 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
                 c[n] = sect
                 c[n]['relative'] = False
                 c[n]['resolution'] = 4.
+                c[n]['source_id'] = cat.get_id()
 
         c.write()
 
