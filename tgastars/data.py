@@ -68,11 +68,12 @@ def update_completed(processes=1, test=False):
     print('{} written.'.format(os.path.join(DATADIR, 'completed.list')))
 
     all_stars = np.array([x for y in pool.map(_get_ini_files, dirs) for x in y])
-    all_stars.sort()
+    ready_stars = np.array(list(set(all_stars) - set(done_stars)))
+    ready_stars.sort()
     if test:
-        np.savetxt(os.path.join(DATADIR, 'ready_test.list'), all_stars, fmt='%s')
+        np.savetxt(os.path.join(DATADIR, 'ready_test.list'), ready_stars, fmt='%s')
     else:
-        np.savetxt(os.path.join(DATADIR, 'ready.list'), all_stars, fmt='%s')
+        np.savetxt(os.path.join(DATADIR, 'ready.list'), ready_stars, fmt='%s')
 
     print('{} written.'.format(os.path.join(DATADIR, 'ready.list')))
 
