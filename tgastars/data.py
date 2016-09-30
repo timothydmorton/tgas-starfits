@@ -8,9 +8,10 @@ from multiprocessing import Pool
 GAIADIR = os.getenv('GAIADATA', os.path.expanduser('~/.gaia'))
 DATADIR = os.getenv('TGASTARS', os.path.expanduser('~/.tgastars'))
 STARMODELDIR = os.path.join(DATADIR, 'starmodels')
+TGASPATH = os.path.join(GAIADIR, 'TgasSource.h5')
 
 try:
-    TGAS = pd.read_hdf(os.path.join(GAIADIR, 'TgasSource.h5'), 'df')
+    TGAS = pd.read_hdf(TGASPATH, 'df')
 except IOError:
     logging.warning('Run tgastars-write-tgas-hdf first!')
     TGAS = None
