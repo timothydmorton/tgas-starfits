@@ -3,7 +3,7 @@ from __future__ import print_function, division
 
 from isochrones.query import Query
 
-from .data import TGASPATHa
+from .data import TGASPATH
 
 TGAS = None
 
