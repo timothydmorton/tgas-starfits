@@ -28,7 +28,7 @@ def get_row(i):
     if i < len(TGAS):
         ind = i
     else:
-        ind = np.where(TGAS.source_id.astype(int)==i)[0][0]
+        ind = np.where(TGAS.source_id==i)[0][0]
     return TGAS.iloc[ind]
 
 def dirname(i):

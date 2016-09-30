@@ -9,6 +9,7 @@ from .models import GaiaDR1_StarModel
 from .write import write_ini
 
 def tgas_starfit(i, ini_kwargs=None, **kwargs):
+    i = int(i)
     d = dirname(i)
     if not os.path.exists(os.path.join(d, 'star.ini')):
         if ini_kwargs is None:
