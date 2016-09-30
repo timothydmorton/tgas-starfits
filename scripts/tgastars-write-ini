@@ -31,7 +31,7 @@ if __name__=='__main__':
         inds = args.indices
 
     def do_the_thing(i):
-        return write_ini(i, raise_exceptions=args.exceptions)
+        return write_ini(i, raise_exceptions=args.exceptions, overwrite=args.overwrite)
 
     if args.processes > 1:
         pool = Pool(processes=args.processes)
