@@ -150,7 +150,7 @@ def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
         except EmptyQueryError:
             pass
         except ValueError:
-            passa[]
+            pass
         
         if not empty:
             n = Cat.name
