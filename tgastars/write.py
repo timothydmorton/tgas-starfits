@@ -9,14 +9,19 @@ from isochrones.query import TwoMASS, Tycho2, WISE, EmptyQueryError
 from isochrones.extinction import get_AV_infinity
 import configobj
 
-from .data import TGAS, dirname, get_row, STARMODELDIR
+from .data import TGAS, dirname, binary_index, get_row, STARMODELDIR
 from .query import TGASQuery
 
 def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
                 raise_exceptions=False, rootdir=STARMODELDIR):
 
-    # Test to see if this is a binary index.
-
+    # Test to see if this is a binary index.  Return write_binary_ini if it works.
+    try:
+        i1, i2 = binary_index(i)
+        return write_binary_ini(i1, i2, catalogs=catalogs, overwrite=overwrite,
+                                raise_exceptions=raise_exceptions, rootdir=rootdir)
+    except ValueError:
+        passs
 
     try:
         # name directory by index
@@ -78,7 +83,7 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
 
 def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
                      overwrite=False, raise_exceptions=False, 
-                     rootdir=STARMODELDIR:
+                     rootdir=STARMODELDIR)
     """ Write ini file for i1-i2 pair.  
 
     For this, use just indices so directory names don't get absurdly long
@@ -168,4 +173,3 @@ def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
         print('unknown Error with index {}!'.format(i))
         if raise_exceptions:
             raise
-        
