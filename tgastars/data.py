@@ -31,12 +31,12 @@ def get_row(i):
         ind = np.where(TGAS.source_id==i)[0][0]
     return TGAS.iloc[ind]
 
-def dirname(i):
+def dirname(i, rootdir=STARMODELDIR):
     """Returns directory name, given index
     """
     gid = source_id(i)
 
-    return os.path.join(DATADIR, 'starmodels', str(gid)[:3], str(gid))
+    return os.path.join(rootdir, str(gid)[:3], str(gid))
 
 
 def _get_ini_files(d):
