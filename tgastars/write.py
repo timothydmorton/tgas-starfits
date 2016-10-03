@@ -83,7 +83,7 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
 
 def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
                      overwrite=False, raise_exceptions=False, 
-                     rootdir=STARMODELDIR)
+                     rootdir=STARMODELDIR):
     """ Write ini file for i1-i2 pair.  
 
     For this, use just indices so directory names don't get absurdly long
