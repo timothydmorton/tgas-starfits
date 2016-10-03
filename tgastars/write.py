@@ -85,7 +85,7 @@ def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
     s1 = TGAS.iloc[i1]
     s2 = TGAS.iloc[i2]
     
-    directory = os.path.join(STARMODELDIR, 'binaries', '{}-{}'.format(i1, i2))
+    directory = os.path.join(rootdir, 'binaries', '{}-{}'.format(i1, i2))
     if not os.path.exists(directory):
         os.makedirs(directory)
     

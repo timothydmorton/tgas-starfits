@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import os, sys, glob
+import os, sys, glob, re
 import logging
 from multiprocessing import Pool
 #from multiprocessing.pool import ThreadPool as Pool
@@ -33,9 +33,18 @@ def get_row(i):
 
 def dirname(i, rootdir=STARMODELDIR):
     """Returns directory name, given index
-    """
-    gid = source_id(i)
 
+    Can also pass string like '125120-12041' or a tuple of indices (12512, 125012)
+    """
+    if type(i)==type(''):
+        m = re.search('(\d+)-(\d+)', i)
+        if m:
+            return os.path.join(rootdir, 'binaries', i)
+    elif hasattr(i, '__iter__'):
+        if len(i)==2:
+            return os.path.join(rootdir, 'binaries', '{}-{}'.format(*i))
+    
+    gid = source_id(i)
     return os.path.join(rootdir, str(gid)[:3], str(gid))
 
 
