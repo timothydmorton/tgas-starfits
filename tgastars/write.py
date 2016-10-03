@@ -14,6 +14,10 @@ from .query import TGASQuery
 
 def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
                 raise_exceptions=False, rootdir=STARMODELDIR):
+
+    # Test to see if this is a binary index.
+
+
     try:
         # name directory by index
         directory = dirname(i, rootdir=rootdir)
@@ -74,88 +78,94 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
 
 def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
                      overwrite=False, raise_exceptions=False, 
-                     rootdir=STARMODELDIR):
+                     rootdir=STARMODELDIR:
     """ Write ini file for i1-i2 pair.  
 
     For this, use just indices so directory names don't get absurdly long
     """
-    if not i1 < i2:
-        i1, i2 = i2, i1
-    
-    s1 = TGAS.iloc[i1]
-    s2 = TGAS.iloc[i2]
-    
-    directory = os.path.join(rootdir, 'binaries', '{}-{}'.format(i1, i2))
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    
-    ini_file = os.path.join(directory, 'star.ini')
-    if os.path.exists(ini_file):
-        if overwrite:
-            os.remove(ini_file)
-        else:
-            return
-    c = configobj.ConfigObj(ini_file)
-    
-    # define these coords in epoch=2000
-    ra = (s1.ra*u.deg - 15*u.yr*s1.pmra*u.mas/u.yr).to('deg').value
-    dec = (s1.dec*u.deg - 15*u.yr*s1.pmdec*u.mas/u.yr).to('deg').value
-    coords1 = SkyCoord(ra, dec, unit='deg')
-    
-    c['ra'] = ra
-    c['dec'] = dec
-    c['maxAV'] = get_AV_infinity(ra, dec)
-
-    plax1, sig1 = s1.parallax, s1.parallax_error 
-    plax2, sig2 = s2.parallax, s2.parallax_error
-
-    # Hack a consistent separation/PA so ObservationTree doesn't get confused
-    c1 = SkyCoord(s1.ra, s1.dec, unit='deg')
-    c2 = SkyCoord(s2.ra, s2.dec, unit='deg')
-    sep = c2.separation(c1).arcsec
-    PA = c2.position_angle(c1).deg
-    
-    norm = 1./sig1**2 + 1./sig2**2
-    c['parallax'] = (plax1/sig1**2 + plax2/sig2**2)/norm, 1/np.sqrt(norm)
-
-    q1 = TGASQuery(s1)
-    q2 = TGASQuery(s2)
-    
-    for Cat in catalogs:
-        sect = configobj.Section(c, 1, c, {})
-        empty = True
+    try:
+        if not i1 < i2:
+            i1, i2 = i2, i1
         
-        cat1 = Cat(q1)
-        try: 
-            mags = cat1.get_photometry()
-            for b in mags:
-                sect[b] = mags[b]
-            sect['id'] = cat1.get_id()
-            empty = False
-        except EmptyQueryError:
-            pass
-        except ValueError:
-            pass
+        s1 = TGAS.iloc[i1]
+        s2 = TGAS.iloc[i2]
         
-        cat2 = Cat(q2)
-        try: 
-            mags = cat2.get_photometry()
-            for b in mags:
-                sect[b + '_1'] = mags[b]
-            sect['separation_1'] = sep #cat2.coords.separation(cat1.query_coords).arcsec[0]
-            sect['PA_1'] = PA #cat2.coords.position_angle(cat1.query_coords).deg[0]
-            sect['id_1'] = cat2.get_id()
+        directory = os.path.join(rootdir, 'binaries', '{}-{}'.format(i1, i2))
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        
+        ini_file = os.path.join(directory, 'stari.ini')
+        if os.path.exists(ini_file):
+            if overwrite:
+                os.remove(ini_file)
+            else:
+                return
+        c = configobj.ConfigObj(ini_file)
+        
+        # define these coords in epoch=2000
+        ra = (s1.ra*u.deg - 15*u.yr*s1.pmra*u.mas/u.yr).to('deg').value
+        dec = (s1.dec*u.deg - 15*u.yr*s1.pmdec*u.mas/u.yr).to('deg').value
+        coords1 = SkyCoord(ra, dec, unit='deg')
+        
+        c['ra'] = ra
+        c['dec'] = dec
+        c['maxAV'] = get_AV_infinity(ra, dec)
 
-            empty = False
-        except EmptyQueryError:
-            pass
-        except ValueError:
-            pass
+        plax1, sig1 = s1.parallax, s1.parallax_error 
+        plax2, sig2 = s2.parallax, s2.parallax_error
+
+        # Hack a consistent separation/PA so ObservationTree doesn't get confused
+        c1 = SkyCoord(s1.ra, s1.dec, unit='deg')
+        c2 = SkyCoord(s2.ra, s2.dec, unit='deg')
+        sep = c2.separation(c1).arcsec
+        PA = c2.position_angle(c1).deg
         
-        if not empty:
-            n = Cat.name
-            c[n] = sect
-            c[n]['relative'] = False
-            c[n]['resolution'] = 4.
-    
-    c.write()
+        norm = 1./sig1**2 + 1./sig2**2
+        c['parallax'] = (plax1/sig1**2 + plax2/sig2**2)/norm, 1/np.sqrt(norm)
+
+        q1 = TGASQuery(s1)
+        q2 = TGASQuery(s2)
+        
+        for Cat in catalogs:
+            sect = configobj.Section(c, 1, c, {})
+            empty = True
+            
+            cat1 = Cat(q1)
+            try: 
+                mags = cat1.get_photometry()
+                for b in mags:
+                    sect[b] = mags[b]
+                sect['id'] = cat1.get_id()
+                empty = False
+            except EmptyQueryError:
+                pass
+            except ValueError:
+                pass
+            
+            cat2 = Cat(q2)
+            try: 
+                mags = cat2.get_photometry()
+                for b in mags:
+                    sect[b + '_1'] = mags[b]
+                sect['separation_1'] = sep #cat2.coords.separation(cat1.query_coords).arcsec[0]
+                sect['PA_1'] = PA #cat2.coords.position_angle(cat1.query_coords).deg[0]
+                sect['id_1'] = cat2.get_id()
+
+                empty = False
+            except EmptyQueryError:
+                pass
+            except ValueError:
+                pass
+            
+            if not empty:
+                n = Cat.name
+                c[n] = sect
+                c[n]['relative'] = False
+                c[n]['resolution'] = 4.
+        
+        c.write()
+    except:
+        print('unknown Error with index {}!'.format(i))
+        if raise_exceptions:
+            raise
+        

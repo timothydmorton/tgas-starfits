@@ -17,6 +17,7 @@ except IOError:
     TGAS = None
 
 def source_id(i):
+    i = int(i)
     if i > len(TGAS):
         return i
     else:
@@ -31,31 +32,44 @@ def get_row(i):
         ind = np.where(TGAS.source_id==i)[0][0]
     return TGAS.iloc[ind]
 
-def dirname(i, rootdir=STARMODELDIR):
-    """Returns directory name, given index (or two indicies)
+def binary_index(i):
+    """Returns i1, i2  (i1 < i2) 
 
-    Can also pass string like '125120-12041' or a tuple of indices (12512, 125012)
+    If doesn't match expected patterns, raises ValueError
     """
     if type(i)==type(''):
         m = re.search('(\d+)-(\d+)', i)
         if m:
             i1, i2 = int(m.group(1)), int(m.group(2))
-            imin = min(i1, i2)
-            imax = max(i1, i2)
-            return os.path.join(rootdir, 'binaries', '{}-{}'.format(imin, imax))
         else:
-            raise ValueError('Unrecognized index! {}'.format(i))
+            raise ValueError('{} not a binary pattern'.format(i))
     elif hasattr(i, '__iter__'):
         if len(i)==2:
             i1, i2 = i
-            imin = min(i1, i2)
-            imax = max(i1, i2)
-            return os.path.join(rootdir, 'binaries', '{}-{}'.format(imin, imax))  
         else:
-            raise ValueError('Unrecognized index! {}'.format(i))
+            raise ValueError
+    else:
+        raise ValueError
 
-    gid = source_id(i)
-    return os.path.join(rootdir, str(gid)[:3], str(gid))
+    imin = min(i1, i2)
+    imax = max(i1, i2)
+
+    return imin, imax
+
+def dirname(i, rootdir=STARMODELDIR):
+    """Returns directory name, given index (or two indicies)
+
+    Can also pass string like '125120-12041' or a tuple of indices (12512, 125012).
+    First attempted to be parsed by `binary_index`
+    """
+    try:
+        # Binary index.
+        i1, i2 = binary_index(i)
+        return os.path.join(rootdir, 'binaries', '{}-{}'.format(i1, i2))
+    except ValueError:
+        # just a single index
+        gid = source_id(i)
+        return os.path.join(rootdir, str(gid)[:3], str(gid))
 
 
 def _get_ini_files(d):
