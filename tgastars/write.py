@@ -130,7 +130,7 @@ def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
             mags = cat1.get_photometry()
             for b in mags:
                 sect[b] = mags[b]
-            sec['id'] = cat1.get_id()
+            sect['id'] = cat1.get_id()
             empty = False
         except EmptyQueryError:
             pass
