@@ -21,7 +21,7 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
         return write_binary_ini(i1, i2, catalogs=catalogs, overwrite=overwrite,
                                 raise_exceptions=raise_exceptions, rootdir=rootdir)
     except ValueError:
-        passs
+        pass
 
     try:
         # name directory by index
