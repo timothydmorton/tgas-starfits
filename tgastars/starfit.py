@@ -4,7 +4,7 @@ import os
 
 from isochrones.starfit import starfit
 
-from .data import dirname
+from .data import dirname, STARMODELDIR
 from .models import GaiaDR1_StarModel
 from .write import write_ini
 
