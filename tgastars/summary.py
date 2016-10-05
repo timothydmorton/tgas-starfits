@@ -46,7 +46,7 @@ def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
 
 class quantile_worker(object):
     def __init__(self, **kwargs):
-        self.kwargs = skwargs
+        self.kwargs = kwargs
 
     def __call__(self, i):
         return get_quantiles(i, **self.kwargs)
