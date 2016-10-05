@@ -34,8 +34,8 @@ def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
         for q in qs:
             new_cols.append('{}_{:02.0f}'.format(newc,q*100))
 
-    ix = os.path.basename(d)
-    df = pd.DataFrame(columns=new_cols, index=[ix])
+    #ix = os.path.basename(d)
+    df = pd.DataFrame(columns=new_cols, index=[i])
     
     for c in columns:
         for q in qs:
