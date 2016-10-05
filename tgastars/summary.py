@@ -5,16 +5,16 @@ import numpy as np
 import pandas as pd
 from multiprocessing import Pool
 
-from .data import get_completed_ids, DATADIR
+from .data import get_completed_ids, DATADIR, STARMODELDIR
 from .models import get_starmodel
 
 def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
                  qs=[0.05,0.16,0.5,0.84,0.95], modelname='dartmouth_starmodel_single',
-                 verbose=False, raise_exceptions=False):
+                 verbose=False, raise_exceptions=False, rootdir=STARMODELDIR):
     """Returns parameter quantiles for starmodel i (as indexed by TGAS table)
     """
     try:
-        mod = get_starmodel(i)
+        mod = get_starmodel(i, rootdir=rootdir)
     except:
         if verbose:
             print('cannnot load {}'.format(modfile))
@@ -44,11 +44,20 @@ def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
         
     return df
 
-def make_summary_df(ids=None, processes=1, filename=None, **kwargs):
+class quantile_worker(object):
+    def __init__(self, **kwargs):
+        self.kwargs = skwargs
+
+    def __call__(self, i):
+        return get_quantiles(i, **self.kwargs)
+
+def make_summary_df(ids=None, processes=1, filename=None, 
+                    rootdir=STARMODELDIR, **kwargs):
     if ids is None:
         ids = get_completed_ids()
 
     pool = Pool(processes=processes)
+    worker = quantile_worker(rootdir=rootdir)
     dfs = pool.map(get_quantiles, ids)
 
     df = pd.concat(dfs)

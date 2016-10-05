@@ -5,7 +5,7 @@ import os
 from isochrones import StarModel
 from math import log10, sqrt
 
-from .data import dirname
+from .data import dirname, STARMODELDIR
 
 class GaiaDR1_StarModel(StarModel):
 
@@ -44,8 +44,8 @@ class GaiaDR1_StarModel(StarModel):
         return lnl
 
 
-def get_starmodel(i, modelname='dartmouth_starmodel_single'):
-    d = dirname(i)
+def get_starmodel(i, modelname='dartmouth_starmodel_single', rootdir=STARMODELDIR):
+    d = dirname(i, rootdir=rootdir)
 
     modfile = os.path.join(d,'{}.h5'.format(modelname))
     return GaiaDR1_StarModel.load_hdf(modfile)
