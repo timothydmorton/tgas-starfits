@@ -46,6 +46,6 @@ class GaiaDR1_StarModel(StarModel):
 
 def get_starmodel(i, modelname='dartmouth_starmodel_single', rootdir=STARMODELDIR):
     d = dirname(i, rootdir=rootdir)
-
     modfile = os.path.join(d,'{}.h5'.format(modelname))
+    logging.debug('loading model from {}'.format(modfile))
     return GaiaDR1_StarModel.load_hdf(modfile)
