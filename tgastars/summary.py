@@ -58,7 +58,7 @@ def make_summary_df(ids=None, processes=1, filename=None,
 
     pool = Pool(processes=processes)
     worker = quantile_worker(rootdir=rootdir)
-    dfs = pool.map(get_quantiles, ids)
+    dfs = pool.map(worker, ids)
 
     df = pd.concat(dfs)
     if filename is None:
