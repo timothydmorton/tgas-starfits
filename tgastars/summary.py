@@ -40,7 +40,7 @@ def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
     for c in columns:
         for q in qs:
             col = new_col_base[c] + '_{:02.0f}'.format(q*100)
-            df.ix[ix, col] = q_df.ix[q, c]
+            df.ix[i, col] = q_df.ix[q, c]
         
     return df
 
