@@ -3,6 +3,7 @@ from __future__ import print_function, division
 import os, sys, re
 import numpy as np
 import pandas as pd
+import logging
 from multiprocessing import Pool
 
 from .data import get_completed_ids, DATADIR, STARMODELDIR

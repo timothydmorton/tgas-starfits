@@ -1,6 +1,7 @@
 from __future__ import print_function, division
 
 import os
+import logging
 
 from isochrones import StarModel
 from math import log10, sqrt
