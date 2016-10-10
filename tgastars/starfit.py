@@ -13,7 +13,7 @@ def tgas_starfit(i, write_ini=True, ini_kwargs=None, rootdir=STARMODELDIR,
     d = dirname(i, rootdir=rootdir)
     if not os.path.exists(os.path.join(d, 'star.ini')):
         if not write_ini:
-            raise ValueError('star.ini not written for {}'.format(i))
+            raise ValueError('star.ini not written for {} (dir={})'.format(i,d))
         if ini_kwargs is None:
             ini_kwargs = {}
             if 'raise_exceptions' not in ini_kwargs:
