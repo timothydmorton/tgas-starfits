@@ -9,10 +9,10 @@ from isochrones.query import TwoMASS, Tycho2, WISE, EmptyQueryError
 from isochrones.extinction import get_AV_infinity
 import configobj
 
-from .data import TGAS, dirname, binary_index, get_row, STARMODELDIR
+from .data import TGAS, dirname, binary_index, get_row, get_Gmag, STARMODELDIR
 from .query import TGASQuery
 
-def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
+def write_ini(i, catalogs=[TwoMASS, WISE], overwrite=False,
                 raise_exceptions=False, rootdir=STARMODELDIR):
 
     # Test to see if this is a binary index.  Return write_binary_ini if it works.
@@ -49,6 +49,12 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
         c['maxAV'] = get_AV_infinity(ra, dec)
         c['parallax'] = s.parallax, s.parallax_error 
 
+        gaia_sect = configobj.Section(c, 1, c, {'G':get_Gmag(i)})
+        gaia_sect['resolution'] = 1.0
+        gaia_sect['relative'] = False
+        c['Gaia'] = gaia_sect
+
+
         q = TGASQuery(s)
         
         for Cat in catalogs:
@@ -75,6 +81,7 @@ def write_ini(i, catalogs=[TwoMASS, Tycho2, WISE], overwrite=False,
                 c[n]['id'] = cat.get_id()
 
         c.write()
+        return c
 
     except:
         print('unknown Error with index {}!'.format(i))
@@ -99,7 +106,7 @@ def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
         if not os.path.exists(directory):
             os.makedirs(directory)
         
-        ini_file = os.path.join(directory, 'stari.ini')
+        ini_file = os.path.join(directory, 'star.ini')
         if os.path.exists(ini_file):
             if overwrite:
                 os.remove(ini_file)

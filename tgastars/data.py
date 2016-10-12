@@ -32,6 +32,10 @@ def get_row(i):
         ind = np.where(TGAS.source_id==i)[0][0]
     return TGAS.iloc[ind]
 
+def get_Gmag(i):
+    s = get_row(i)
+    return s.phot_g_mean_mag, 0.02
+
 def binary_index(i):
     """Returns i1, i2  (i1 < i2) 
 
