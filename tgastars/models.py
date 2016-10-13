@@ -45,7 +45,7 @@ class GaiaDR1_StarModel(StarModel):
         return lnl
 
 
-def get_starmodel(i, modelname='dartmouth_starmodel_single', rootdir=STARMODELDIR):
+def get_starmodel(i, modelname='mist_starmodel_single', rootdir=STARMODELDIR):
     d = dirname(i, rootdir=rootdir)
     modfile = os.path.join(d,'{}.h5'.format(modelname))
     logging.debug('loading model from {}'.format(modfile))
