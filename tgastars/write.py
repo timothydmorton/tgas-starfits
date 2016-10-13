@@ -9,10 +9,12 @@ from isochrones.query import TwoMASS, Tycho2, WISE, EmptyQueryError
 from isochrones.extinction import get_AV_infinity
 import configobj
 
-from .data import TGAS, dirname, binary_index, get_row, get_Gmag, STARMODELDIR
+from .data import TGAS, dirname, binary_index, get_row, get_Gmag, STARMODELDIR, source_id
 from .query import TGASQuery
 
-def write_ini(i, catalogs=[TwoMASS, WISE], overwrite=False,
+DEFAULT_CATALOGS = [TwoMASS, WISE]
+
+def write_ini(i, catalogs=DEFAULT_CATALOGS, overwrite=False,
                 raise_exceptions=False, rootdir=STARMODELDIR):
 
     # Test to see if this is a binary index.  Return write_binary_ini if it works.
@@ -52,6 +54,7 @@ def write_ini(i, catalogs=[TwoMASS, WISE], overwrite=False,
         gaia_sect = configobj.Section(c, 1, c, {'G':get_Gmag(i)})
         gaia_sect['resolution'] = 1.0
         gaia_sect['relative'] = False
+        gaia_sect['id'] = source_id(i)
         c['Gaia'] = gaia_sect
 
 
@@ -88,7 +91,7 @@ def write_ini(i, catalogs=[TwoMASS, WISE], overwrite=False,
         if raise_exceptions:
             raise
 
-def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
+def write_binary_ini(i1, i2, catalogs=DEFAULT_CATALOGS,
                      overwrite=False, raise_exceptions=False, 
                      rootdir=STARMODELDIR):
     """ Write ini file for i1-i2 pair.  
@@ -135,9 +138,19 @@ def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
         norm = 1./sig1**2 + 1./sig2**2
         c['parallax'] = (plax1/sig1**2 + plax2/sig2**2)/norm, 1/np.sqrt(norm)
 
+        gaia_sect = configobj.Section(c, 1, c, {'G':get_Gmag(i1),
+                                                'id':source_id(i1),
+                                                'G_1':get_Gmag(i2),
+                                                'id_1':source_id(i2)})
+        gaia_sect['separation_1'] = sep 
+        gaia_sect['PA_1'] = PA 
+        gaia_sect['resolution'] = 1.0
+        gaia_sect['relative'] = False
+        c['Gaia'] = gaia_sect
+
         q1 = TGASQuery(s1)
         q2 = TGASQuery(s2)
-        
+
         for Cat in catalogs:
             sect = configobj.Section(c, 1, c, {})
             empty = True
@@ -176,7 +189,8 @@ def write_binary_ini(i1, i2, catalogs=[TwoMASS, Tycho2, WISE],
                 c[n]['resolution'] = 4.
         
         c.write()
+        return c
     except:
-        print('unknown Error with index {}!'.format(i))
+        print('unknown Error with index {}-{}!'.format(i1,i2))
         if raise_exceptions:
             raise
