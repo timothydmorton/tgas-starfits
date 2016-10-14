@@ -16,7 +16,10 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     listfile = sys.argv[1]
-    id_list = np.loadtxt(args.listfile)
+    try:
+        id_list = np.loadtxt(args.listfile)
+    except ValueError:
+        id_list = np.loadtxt(args.listfile, dtype=str)
 
     outfile = '{}_summary.h5'.format(os.path.basename(args.listfile))
 
