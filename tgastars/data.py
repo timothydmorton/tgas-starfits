@@ -71,6 +71,7 @@ def dirname(i, rootdir=STARMODELDIR):
         i1, i2 = binary_index(i)
         d = os.path.join(rootdir, 'binaries', '{}-{}'.format(i1, i2))
     except ValueError:
+        raise
         # just a single index
         gid = source_id(i)
         d = os.path.join(rootdir, str(gid)[:3], str(gid))
