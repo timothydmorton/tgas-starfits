@@ -53,7 +53,7 @@ def binary_index(i):
         else:
             raise ValueError
     else:
-        logging.error('type problem with argument? {} has type {}'.format(i, type(i)))
+        # logging.error('type problem with argument? {} has type {}'.format(i, type(i)))
         raise ValueError
 
     imin = min(i1, i2)
@@ -72,7 +72,6 @@ def dirname(i, rootdir=STARMODELDIR):
         i1, i2 = binary_index(i)
         d = os.path.join(rootdir, 'binaries', '{}-{}'.format(i1, i2))
     except ValueError:
-        raise
         # just a single index
         gid = source_id(i)
         d = os.path.join(rootdir, str(gid)[:3], str(gid))
