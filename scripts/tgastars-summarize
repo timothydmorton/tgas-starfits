@@ -12,6 +12,7 @@ if __name__=='__main__':
     parser.add_argument('-v','--verbose', action='store_true')
     parser.add_argument('-p','--processes', type=int, default=1)
     parser.add_argument('--rootdir', default=None)
+    parser.add_argument('-e','--exceptions', action='store_true')
 
     args = parser.parse_args()
 
@@ -24,4 +25,5 @@ if __name__=='__main__':
     outfile = '{}_summary.h5'.format(os.path.basename(args.listfile))
 
     make_summary_df(id_list, processes=args.processes,
-                    filename=outfile, rootdir=args.rootdir)
+                    filename=outfile, rootdir=args.rootdir,
+                    raise_exceptions=args.exceptions)
