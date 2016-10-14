@@ -6,11 +6,11 @@ import pandas as pd
 import logging
 from multiprocessing import Pool
 
-from .data import get_completed_ids, DATADIR, STARMODELDIR
+from .data import get_completed_ids, DATADIR, STARMODELDIR, source_id
 from .models import get_starmodel
 
-def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
-                 qs=[0.05,0.16,0.5,0.84,0.95], modelname='dartmouth_starmodel_single',
+def get_quantiles(i, columns=['mass','age','feh','distance','AV'],
+                 qs=[0.05,0.16,0.5,0.84,0.95], modelname='mist_starmodel_single',
                  verbose=False, raise_exceptions=False, rootdir=STARMODELDIR):
     """Returns parameter quantiles for starmodel i (as indexed by TGAS table)
     """
@@ -22,11 +22,18 @@ def get_quantiles(i, columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
         if raise_exceptions:
             raise
         return pd.DataFrame()
-        
-    q_df = mod.samples[columns].quantile(qs)
+    
+    # Get actual column names
+    true_cols = []
+    for c1 in mod.samples.columns:
+        for c2 in columns:
+            if re.search(c2, c1):
+                true_cols.append(c1)
+
+    q_df = mod.samples[true_cols].quantile(qs)
     new_cols = []
     new_col_base = {}
-    for c in columns:
+    for c in true_cols:
         if not re.search('mass',c):
             newc = c[:-2]
         else:
@@ -53,12 +60,14 @@ class quantile_worker(object):
         return get_quantiles(i, **self.kwargs)
 
 def make_summary_df(ids=None, processes=1, filename=None, 
-                    rootdir=STARMODELDIR, **kwargs):
+                    rootdir=STARMODELDIR, 
+                    columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
+                    **kwargs):
     if ids is None:
         ids = get_completed_ids()
 
     pool = Pool(processes=processes)
-    worker = quantile_worker(rootdir=rootdir)
+    worker = quantile_worker(rootdir=rootdir, columns=columns)
     dfs = pool.map(worker, ids)
 
     df = pd.concat(dfs)
