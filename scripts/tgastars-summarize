@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import os, sys
+import argparse
+import numpy as np
+from tgastars.summary import make_summary_df
+
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(description='Write summary HDF for given indices of TGAS table')
+
+    parser.add_argument('listfile')
+    parser.add_argument('-v','--verbose', action='store_true')
+    parser.add_argument('-p','--processes', type=int, default=1)
+    parser.add_argument('--rootdir', default=None)
+
+    args = parser.parse_args()
+
+    listfile = sys.argv[1]
+    id_list = np.loadtxt(args.listfile)
+
+    outfile = '{}_summary.h5'.format(os.path.basename(args.listfile))
+
+    make_summary_df(id_list, processes=args.processes,
+                    filename=outfile, rootdir=args.rootdir)
