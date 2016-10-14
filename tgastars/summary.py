@@ -31,23 +31,25 @@ def get_quantiles(i, columns=['mass','age','feh','distance','AV'],
                 true_cols.append(c1)
 
     q_df = mod.samples[true_cols].quantile(qs)
-    new_cols = []
-    new_col_base = {}
-    for c in true_cols:
-        if not re.search('mass',c):
-            newc = c[:-2]
-        else:
-            newc = 'mass' + c[-2:]
-        new_col_base[c] = newc
-        for q in qs:
-            new_cols.append('{}_{:02.0f}'.format(newc,q*100))
+    # new_cols = []
+    # new_col_base = {}
+    # for c in true_cols:
+    #     if not re.search('mass',c):
+    #         newc = c[:-2]
+    #     else:
+    #         newc = 'mass' + c[-2:]
+    #     new_col_base[c] = newc
+    #     for q in qs:
+    #         new_cols.append('{}_{:02.0f}'.format(newc,q*100))
 
     #ix = os.path.basename(d)
-    df = pd.DataFrame(columns=new_cols, index=[i])
-    
+    # df = pd.DataFrame(columns=new_cols, index=[i])
+    df = pd.DataFrame(columns=true_cols, index=[i])
+
     for c in true_cols:
         for q in qs:
-            col = new_col_base[c] + '_{:02.0f}'.format(q*100)
+            # col = new_col_base[c] + '_{:02.0f}'.format(q*100)
+            col = c + '_{:02.0f}'.format(q*100)
             df.ix[i, col] = q_df.ix[q, c]
         
     return df
