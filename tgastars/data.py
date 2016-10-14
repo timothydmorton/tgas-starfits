@@ -41,7 +41,7 @@ def binary_index(i):
 
     If doesn't match expected patterns, raises ValueError
     """
-    if type(i)==type(''):
+    if isinstance(i, basestring):
         m = re.search('(\d+)-(\d+)', i)
         if m:
             i1, i2 = int(m.group(1)), int(m.group(2))
@@ -53,6 +53,7 @@ def binary_index(i):
         else:
             raise ValueError
     else:
+        logging.error('type problem with argument? {} has type {}'.format(i, type(i)))
         raise ValueError
 
     imin = min(i1, i2)
