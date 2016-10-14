@@ -60,7 +60,7 @@ class quantile_worker(object):
         self.kwargs = kwargs
 
     def __call__(self, i):
-        return get_quantiles(id_list[i], **self.kwargs)
+        return get_quantiles(self.id_list[i], **self.kwargs)
 
 def make_summary_df(ids=None, processes=1, filename=None, **kwargs):
 
