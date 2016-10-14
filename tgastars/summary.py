@@ -15,10 +15,10 @@ def get_quantiles(i, columns=['mass','age','feh','distance','AV'],
     """Returns parameter quantiles for starmodel i (as indexed by TGAS table)
     """
     try:
-        mod = get_starmodel(i, rootdir=rootdir)
+        mod = get_starmodel(i, rootdir=rootdir, modelname)
     except:
         if verbose:
-            print('cannnot load {}'.format(modfile))
+            print('cannnot load starmodel! {}, rootdir={}'.format(i, rootdir))
         if raise_exceptions:
             raise
         return pd.DataFrame()
