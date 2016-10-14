@@ -44,7 +44,7 @@ def get_quantiles(i, columns=['mass','age','feh','distance','AV'],
 
     #ix = os.path.basename(d)
     # df = pd.DataFrame(columns=new_cols, index=[i])
-    df = pd.DataFrame(columns=true_cols, index=[i])
+    df = pd.DataFrame(index=[i])
 
     for c in true_cols:
         for q in qs:
