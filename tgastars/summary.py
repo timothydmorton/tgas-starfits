@@ -55,12 +55,11 @@ def get_quantiles(i, columns=['mass','age','feh','distance','AV'],
     return df
 
 class quantile_worker(object):
-    def __init__(self, id_list, **kwargs):
-        self.id_list = id_list
+    def __init__(self, **kwargs):
         self.kwargs = kwargs
 
     def __call__(self, i):
-        return get_quantiles(self.id_list[i], **self.kwargs)
+        return get_quantiles(i, **self.kwargs)
 
 def make_summary_df(ids=None, processes=1, filename=None, **kwargs):
 
@@ -68,9 +67,8 @@ def make_summary_df(ids=None, processes=1, filename=None, **kwargs):
         ids = get_completed_ids()
 
     pool = Pool(processes=processes)
-    worker = quantile_worker(ids, **kwargs)
-
-    dfs = pool.map(worker, range(len(ids)))
+    worker = quantile_worker(**kwargs)
+    dfs = pool.map(worker, ids)
 
     df = pd.concat(dfs)
     if filename is None:
