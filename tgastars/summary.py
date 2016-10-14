@@ -61,15 +61,13 @@ class quantile_worker(object):
     def __call__(self, i):
         return get_quantiles(i, **self.kwargs)
 
-def make_summary_df(ids=None, processes=1, filename=None, 
-                    rootdir=STARMODELDIR, 
-                    columns=['mass_0_0','age_0','feh_0','distance_0','AV_0'],
-                    **kwargs):
+def make_summary_df(ids=None, processes=1, filename=None, **kwargs):
+
     if ids is None:
         ids = get_completed_ids()
 
     pool = Pool(processes=processes)
-    worker = quantile_worker(rootdir=rootdir, columns=columns)
+    worker = quantile_worker(**kwargs)
     dfs = pool.map(worker, ids)
 
     df = pd.concat(dfs)
