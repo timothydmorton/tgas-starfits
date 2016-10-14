@@ -18,7 +18,7 @@ if __name__=='__main__':
 
     listfile = sys.argv[1]
     try:
-        id_list = np.loadtxt(args.listfile)
+        id_list = np.loadtxt(args.listfile, dtype=int)
     except ValueError:
         id_list = np.loadtxt(args.listfile, dtype=str)
 
