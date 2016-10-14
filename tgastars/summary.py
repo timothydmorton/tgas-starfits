@@ -68,8 +68,9 @@ def make_summary_df(ids=None, processes=1, filename=None, **kwargs):
         ids = get_completed_ids()
 
     pool = Pool(processes=processes)
-    worker = quantile_worker(id_list=ids, **kwargs)
-    dfs = pool.map(worker, xrange(len(ids)))
+    worker = quantile_worker(ids, **kwargs)
+
+    dfs = pool.map(worker, range(len(ids)))
 
     df = pd.concat(dfs)
     if filename is None:
